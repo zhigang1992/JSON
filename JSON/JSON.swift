@@ -9,7 +9,7 @@
 import Foundation
 public struct JSON {
 
-    var value: Optional<NSObject>
+    public var value: Optional<NSObject>
 
     public init(value: Optional<NSObject>) {
         self.value = value
