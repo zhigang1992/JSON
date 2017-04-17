@@ -85,6 +85,15 @@ public struct JSON {
         }
     }
 
+    public var double: Double? {
+        get {
+            return self.value as? Double
+        }
+        set {
+            self.value = newValue.flatMap({ $0 as NSObject})
+        }
+    }
+
     public var string: String? {
         get {
             return self.value as? String
@@ -116,6 +125,45 @@ public struct JSON {
 
                 return (key, JSON(value: value as? NSObject))
             })
+        })
+    }
+    
+}
+
+extension JSON: ExpressibleByDictionaryLiteral {
+
+    public typealias Key = String
+    public typealias Value = Any
+    public init(dictionaryLiteral elements: (JSON.Key, JSON.Value)...) {
+        var dictionary:[Key: Value] = [:]
+        elements.forEach({ dictionary[$0.0] = $0.1 })
+        self.init(value: dictionary as NSDictionary)
+    }
+
+}
+
+extension JSON: ExpressibleByArrayLiteral {
+
+    public typealias Element = Any
+    public init(arrayLiteral elements: JSON.Element...) {
+        self.init(value: elements as NSArray)
+    }
+    
+}
+
+extension JSON {
+
+    public func encode() -> Data? {
+        return self.value.flatMap({
+            try? JSONSerialization.data(withJSONObject: $0, options: [])
+        })
+    }
+
+    public var prettyJson: String? {
+        return self.value.flatMap({
+            try? JSONSerialization.data(withJSONObject: $0, options: [.prettyPrinted])
+        }).flatMap({
+            String(data: $0, encoding: .utf8)
         })
     }
     
