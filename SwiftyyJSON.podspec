@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "JSON"
+  s.name         = "SwiftyyJSON"
   s.version      = "1.0.2"
   s.summary      = "JSON for Swift"
 
